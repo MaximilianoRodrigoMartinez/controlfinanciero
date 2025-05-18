@@ -1,51 +1,86 @@
-let ingresoMensual = 0;
-let gastos = [];
+let movimientos = JSON.parse(localStorage.getItem('movimientos')) || [];
 
-function ingresarIngreso() {
-    ingresoMensual = parseFloat(prompt("Ingrese su ingreso mensual:"));
+const formulario = document.getElementById('formulario');
+const movimientosDiv = document.getElementById('movimientos');
+const resumenDiv = document.getElementById('resumen');
+
+// Evento principal
+formulario.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const descripcion = document.getElementById('descripcion').value.trim();
+  const monto = parseFloat(document.getElementById('monto').value);
+  const tipo = document.getElementById('tipo').value;
+
+  if (!descripcion || isNaN(monto)) {
+    alert("Completá todos los campos correctamente");
+    return;
+  }
+
+  const nuevoMovimiento = { descripcion, monto, tipo, id: Date.now() };
+  movimientos.push(nuevoMovimiento);
+  localStorage.setItem('movimientos', JSON.stringify(movimientos));
+
+  formulario.reset();
+  renderizar();
+});
+
+// Mostrar movimientos
+function renderizar() {
+  movimientosDiv.innerHTML = '';
+
+  movimientos.forEach((mov) => {
+    const item = document.createElement('div');
+    item.className = `movimiento ${mov.tipo}`;
+    item.innerHTML = `
+      <span>${mov.descripcion} - $${mov.monto}</span>
+      <button onclick="eliminarMovimiento(${mov.id})">🗑️</button>
+    `;
+    movimientosDiv.appendChild(item);
+  });
+
+  actualizarResumen();
 }
 
-function ingresarGasto() {
-    let nombreGasto = prompt("Ingrese el nombre del gasto:");
-    let montoGasto = parseFloat(prompt("Ingrese el monto del gasto:"));
-    let gasto = {
-        nombre: nombreGasto,
-        monto: montoGasto
-    };
-    gastos.push(gasto);
-    alert("Gasto agregado: " + nombreGasto + " - $" + montoGasto);
+// Eliminar movimiento
+function eliminarMovimiento(id) {
+  movimientos = movimientos.filter(mov => mov.id !== id);
+  localStorage.setItem('movimientos', JSON.stringify(movimientos));
+  renderizar();
 }
 
-function verResumen() {
-    let resumen = "Ingreso mensual: $" + ingresoMensual + "\nGastos: \n";
-    gastos.forEach((gasto, index) => {
-        resumen += (index + 1) + ". " + gasto.nombre + " - $" + gasto.monto + "\n";
-    });
-    alert(resumen);
+// Calcular totales y balance
+function actualizarResumen() {
+  const ingresos = movimientos
+    .filter(m => m.tipo === 'ingreso')
+    .reduce((acc, mov) => acc + mov.monto, 0);
+
+  const egresos = movimientos
+    .filter(m => m.tipo === 'egreso')
+    .reduce((acc, mov) => acc + mov.monto, 0);
+
+  const balance = ingresos - egresos;
+
+  resumenDiv.innerHTML = `
+    <h3>Resumen</h3>
+    <p>Ingresos: $${ingresos}</p>
+    <p>Egresos: $${egresos}</p>
+    <p><strong>Balance: $${balance}</strong></p>
+  `;
 }
 
-while (true) {
-    let opcion = prompt("Elija una opción:\n1. Ingresar ingreso mensual\n2. Ingresar gastos\n3. Ver resumen\n4. Salir");
+document.addEventListener('DOMContentLoaded', renderizar);
 
-    switch (opcion) {
-        case "1":
-            ingresarIngreso();
-            break;
-        case "2":
-            ingresarGasto();
-            break;
-        case "3":
-            verResumen();
-            break;
-        case "4":
-            alert("Saliendo...");
-            break;
-        default:
-            alert("Opción no válida, intente nuevamente.");
-            continue;
-    }
+// Boton borrar todo
 
-    if (opcion === "4") {
-        break;
-    }
-}
+const btnBorrarTodo = document.getElementById('borrarTodo');
+
+// Evento para borrar todo
+btnBorrarTodo.addEventListener('click', () => {
+  const confirmacion = confirm("¿Estás seguro que querés borrar todos los movimientos?");
+  if (confirmacion) {
+    movimientos = [];
+    localStorage.removeItem('movimientos');
+    renderizar();
+  }
+});

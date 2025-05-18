@@ -1,15 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Finanzas Personales</title>
+  <meta charset="UTF-8">
+  <title>Control Financiero</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Simulador de Finanzas Personales</h1>
-    <p>Este simulador permite ingresar tu ingreso mensual y los gastos que realices, y luego te muestra un resumen con tus ingresos y gastos.</p>
-    <p>Interacción con el usuario a través de los cuadros de diálogo: Prompt, Confirm y Alert.</p>
+  <h1>Simulador de Control Financiero</h1>
 
-    <script src="script.js"></script>
+  <form id="formulario">
+    <input type="text" id="descripcion" placeholder="Descripción" required>
+    <input type="number" id="monto" placeholder="Monto" required>
+    <select id="tipo">
+      <option value="ingreso">Ingreso</option>
+      <option value="egreso">Egreso</option>
+    </select>
+    <button type="submit">Agregar</button>
+  </form>
+
+  <div id="movimientos" class="contenedor"></div>
+  <div id="resumen" class="contenedor resumen"></div>
+  <button id="borrarTodo" class="borrar-todo">🧹 Borrar Todo</button>
+
+
+  <script src="presupuesto.js"></script>
 </body>
 </html>
