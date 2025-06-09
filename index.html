@@ -15,6 +15,14 @@
       <option value="ingreso">Ingreso</option>
       <option value="egreso">Egreso</option>
     </select>
+    <select id="categoria" required>
+      <option value="">-- Seleccione categoría --</option>
+      <option value="comida">🍔 Comida</option>
+      <option value="transporte">🚗 Transporte</option>
+      <option value="salario">💰 Salario</option>
+      <option value="ocio">🎮 Ocio</option>
+      <option value="otros">📌 Otros</option>
+    </select>
     <button type="submit">Agregar</button>
   </form>
 
@@ -25,14 +33,31 @@
   <option value="egreso">Egresos</option>
 </select>
 
+<input type="text" id="buscador" placeholder="🔍 Buscar movimientos..." class="buscar-input">
+
+
   <div id="movimientos" class="contenedor"></div>
   <div id="resumen" class="contenedor resumen"></div>
   <button id="borrarTodo" class="borrar-todo">🧹 Borrar Todo</button>
-  <button id="exportarJSON" class="borrar-todo">⬇️ Exportar JSON</button>
-  <label for="importarJSON" class="borrar-todo" style="display: inline-block; cursor: pointer;">
-    ⬆️ Importar JSON
-  </label>
-  <input type="file" id="importarJSON" accept=".json" style="display: none;">
+  <button id="exportarJSON" class="borrar-todo" title="Descargar todos los movimientos">⬇️ Exportar JSON</button>
+  <button id="ImportarJSON" class="borrar-todo" title="Descargar todos los movimientos">⬆️ Importar JSON</button>
+  <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+<div class="conversor">
+  <h3>Conversor</h3>
+  <input type="number" id="monto-convertir" placeholder="Monto" value="100">
+  <select id="moneda-origen">
+    <option value="ARS">ARS (Peso Argentino)</option>
+    <option value="USD">USD (Dólar)</option>
+  </select>
+  <span>→</span>
+  <select id="moneda-destino">
+    <option value="USD">USD (Dólar)</option>
+    <option value="ARS">ARS (Peso Argentino)</option>
+  </select>
+  <button id="btn-convertir">Convertir</button>
+  <div id="resultado-conversion"></div>
+</div>
 
   <div class="grafico-contenedor">
     <canvas id="grafico"></canvas>

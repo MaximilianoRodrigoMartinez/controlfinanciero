@@ -76,3 +76,22 @@ input, select, button {
     align-items: center;
 }
 
+.buscar-input {
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+.conversor {
+  background: #fff;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+.conversor select, .conversor input {
+  padding: 8px;
+  margin: 5px;
+}
