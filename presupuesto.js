@@ -4,6 +4,8 @@ const formulario = document.getElementById('formulario');
 const movimientosDiv = document.getElementById('movimientos');
 const resumenDiv = document.getElementById('resumen');
 let grafico = null;
+let filtroSeleccionado = 'todos';
+
 
 
 // Evento principal
@@ -31,30 +33,30 @@ formulario.addEventListener('submit', (e) => {
 function renderizar() {
   movimientosDiv.innerHTML = '';
   movimientos.sort((a, b) => b.id - a.id);
-  movimientos.forEach((mov) => {
+
+  const movimientosFiltrados = movimientos.filter(mov => {
+    if (filtroSeleccionado === 'todos') return true;
+    return mov.tipo === filtroSeleccionado;
+  });
+
+  movimientosFiltrados.forEach((mov) => {
     const item = document.createElement('div');
     item.className = `movimiento ${mov.tipo}`;
     item.innerHTML = `
-    <div class="contenido">
       <div>
         <strong>${mov.descripcion}</strong> - $${mov.monto}
         <br>
         <small>${new Date(mov.id).toLocaleString()}</small>
       </div>
-      <div class="botones">
-        <button onclick="eliminarMovimiento(${mov.id})">🗑️</button>
-        <button onclick="editarMovimiento(${mov.id})">✏️</button>
-      </div>
-    </div>
-  `;
-  
-  
+      <button onclick="eliminarMovimiento(${mov.id})">🗑️</button>
+      <button onclick="editarMovimiento(${mov.id})">✏️</button>
+    `;
     movimientosDiv.appendChild(item);
   });
 
   actualizarResumen();
-
 }
+
 
 // Eliminar movimiento
 function eliminarMovimiento(id) {
@@ -169,3 +171,61 @@ function actualizarGrafico(ingresos, egresos) {
     }
   });
 }
+
+// Filtro de movimientos
+
+document.getElementById('filtro').addEventListener('change', function () {
+  filtroSeleccionado = this.value;
+  renderizar();
+});
+
+// Guardar "Mis Finanzas"
+
+// Exportar movimientos como archivo JSON
+document.getElementById('exportarJSON').addEventListener('click', () => {
+  if (movimientos.length === 0) {
+    Swal.fire("⚠️ Atención", "No hay movimientos para exportar.", "warning");
+    return;
+  }
+
+  const dataStr = JSON.stringify(movimientos, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const enlace = document.createElement('a');
+  enlace.href = url;
+  enlace.download = 'movimientos.json';
+  enlace.click();
+
+  URL.revokeObjectURL(url);
+});
+
+
+// Importar movimientos desde un archivo JSON
+document.getElementById('importarJSON').addEventListener('change', (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const importedMovimientos = JSON.parse(e.target.result);
+
+      if (Array.isArray(importedMovimientos)) {
+        const idsExistentes = new Set(movimientos.map(m => m.id));
+        const nuevos = importedMovimientos.filter(m => !idsExistentes.has(m.id));
+
+        movimientos = movimientos.concat(nuevos);
+        localStorage.setItem('movimientos', JSON.stringify(movimientos));
+        renderizar();
+
+        Swal.fire("✅ Importación exitosa", `${nuevos.length} movimientos agregados.`, "success");
+      } else {
+        Swal.fire("❌ Error", "El archivo no contiene un formato válido.", "error");
+      }
+    } catch (error) {
+      Swal.fire("❌ Error al importar", error.message, "error");
+    }
+  };
+  reader.readAsText(file);
+});
