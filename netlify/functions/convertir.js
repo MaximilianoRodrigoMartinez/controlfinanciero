@@ -1,6 +1,6 @@
 exports.handler = async (event) => {
   const { monto, de, a } = event.queryStringParameters;
-  const API_KEY = process.env.API_KEY;
+  const EXCHANGE_API_KEY = process.env.EXCHANGE_API_KEY;
 
   try {
     const response = await fetch(`https://v6.exchangerate-api.com/v6/${EXCHANGE_API_KEY}/pair/${de}/${a}/${monto}`);
