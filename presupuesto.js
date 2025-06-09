@@ -48,9 +48,19 @@ function renderizar() {
 
   const movimientosFiltrados = movimientos.filter(mov => {
     const cumpleFiltro = filtroSeleccionado === 'todos' || mov.tipo === filtroSeleccionado;
-    const cumpleBusqueda = mov.descripcion.toLowerCase().includes(textoBusqueda);
+  
+    const textoCompleto = `
+      ${mov.descripcion} 
+      ${mov.monto} 
+      ${mov.categoria} 
+      ${new Date(mov.id).toLocaleString()}
+    `.toLowerCase();
+  
+    const cumpleBusqueda = textoCompleto.includes(textoBusqueda);
+  
     return cumpleFiltro && cumpleBusqueda;
   });
+  
 
   movimientosFiltrados.forEach((mov) => {
     const item = document.createElement('div');
@@ -249,6 +259,8 @@ document.getElementById('fileInput').addEventListener('change', (event) => {
   // Resetear el input para permitir reimportar el mismo archivo
   event.target.value = '';
 });
+
+
 // Conversor
 document.getElementById('btn-convertir').addEventListener('click', async () => {
   const monto = parseFloat(document.getElementById('monto-convertir').value);
@@ -271,9 +283,10 @@ document.getElementById('btn-convertir').addEventListener('click', async () => {
         <small>Tasa: 1 ${de} = ${data.conversion_rate} ${a}</small>
       `;
     } else {
-      throw new Error(data.error-type);
+      throw new Error(data.error);
     }
   } catch (error) {
     Swal.fire("Error API", "No se pudo obtener la tasa de cambio", "error");
+    console.error("Error detallado:", error); 
   }
 });
