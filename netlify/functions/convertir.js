@@ -3,7 +3,7 @@ exports.handler = async (event) => {
   const API_KEY = process.env.API_KEY;
 
   try {
-    const response = await fetch(`https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${de}/${a}/${monto}`);
+    const response = await fetch(`https://v6.exchangerate-api.com/v6/${EXCHANGE_API_KEY}/pair/${de}/${a}/${monto}`);
     const data = await response.json();
 
     if (data.result === "success") {
