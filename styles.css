@@ -11,8 +11,9 @@ form {
 }
   
 input, select, button {
-    margin: 5px 0;
+    margin: 5px;
     padding: 10px;
+    margin-left: 10px;
 }
   
 .contenedor {
@@ -22,10 +23,11 @@ input, select, button {
 .movimiento {
     background: #fff;
     padding: 10px;
-    margin: 5px 0;
+    margin: 5px;
+    margin-right: 20px;
     border-left: 5px solid;
     display: flex;
-    justify-content: space-between;
+    justify-content:flex-start;
     align-items: center;
 }
   
@@ -35,6 +37,7 @@ input, select, button {
   
 .movimiento.egreso {
     border-color: red;
+    margin-right: 20px;
 }
   
 .resumen {
@@ -54,4 +57,21 @@ input, select, button {
   
 .borrar-todo:hover {
     background-color: #d62828;
+}
+
+.grafico-contenedor {
+    max-width: 400px;
+    margin: 20px auto;
+}
+  
+.grafico-contenedor canvas {
+    width: 100%;
+    height: auto;
+}
+  
+.contenido {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    align-items: center;
 }

@@ -35,14 +35,19 @@ function renderizar() {
     const item = document.createElement('div');
     item.className = `movimiento ${mov.tipo}`;
     item.innerHTML = `
-    <div>
-      <strong>${mov.descripcion}</strong> - $${mov.monto}
-      <br>
-      <small>${new Date(mov.id).toLocaleString()}</small>
+    <div class="contenido">
+      <div>
+        <strong>${mov.descripcion}</strong> - $${mov.monto}
+        <br>
+        <small>${new Date(mov.id).toLocaleString()}</small>
+      </div>
+      <div class="botones">
+        <button onclick="eliminarMovimiento(${mov.id})">🗑️</button>
+        <button onclick="editarMovimiento(${mov.id})">✏️</button>
+      </div>
     </div>
-    <button onclick="eliminarMovimiento(${mov.id})">🗑️</button>
-    <button onclick="editarMovimiento(${mov.id})">✏️</button>
   `;
+  
   
     movimientosDiv.appendChild(item);
   });
