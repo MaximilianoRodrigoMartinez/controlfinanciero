@@ -1,8 +1,6 @@
-const fetch = require('node-fetch'); // Solo necesario en Node <18
-
 exports.handler = async (event) => {
   const { monto, de, a } = event.queryStringParameters;
-  const API_KEY = process.env.API_KEY; // Esta variable la configurarás en Netlify
+  const API_KEY = process.env.API_KEY;
 
   try {
     const response = await fetch(`https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${de}/${a}/${monto}`);
